@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Ionkepler</string>
+    <string name="action_settings">Settings</string>
+    <string name="agreement">I am pleased with the service</string>
+    <string name="clear_pad">Clear Pad</string>
+    <string name="save_signature">Done</string>
+</resources>

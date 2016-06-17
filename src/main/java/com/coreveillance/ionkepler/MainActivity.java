@@ -69,13 +69,21 @@ public class MainActivity extends Activity{
     private String mCameraPhotoPath;
 
     private static final String[] INITIAL_PERMS={
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.INTERNET,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
     };
     private static final String[] LOCATION_PERMS={
             Manifest.permission.ACCESS_FINE_LOCATION
     };
+    private static final String[] CAMERA_PERMS={
+            Manifest.permission.CAMERA
+    };
     private static final int INITIAL_REQUEST=1337;
-    private static final int LOCATION_REQUEST=INITIAL_REQUEST;
+    private static final int CAMERA_REQUEST=INITIAL_REQUEST+1;
+    private static final int LOCATION_REQUEST=INITIAL_REQUEST+2;
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +106,7 @@ public class MainActivity extends Activity{
                 Toast.makeText(getBaseContext(), "Gps turned off ", Toast.LENGTH_LONG).show();
             }
         };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -171,8 +179,8 @@ public class MainActivity extends Activity{
         myWebView.loadUrl(url);
     }
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (!canAccessLocation()) {
-            Toast.makeText(getBaseContext(), "Ionkepler needs to use your Location", Toast.LENGTH_LONG).show();
+        if (!canAccessLocation() || !canAccessCamera()) {
+            Toast.makeText(getBaseContext(), "Ionkepler needs to use your Location and Camera", Toast.LENGTH_LONG).show();
         }
         if (Build.VERSION.SDK_INT >= 11) {
             recreate();
@@ -188,6 +196,9 @@ public class MainActivity extends Activity{
 
     private boolean canAccessLocation() {
         return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+    private boolean canAccessCamera() {
+        return(hasPermission(Manifest.permission.CAMERA));
     }
     @TargetApi(Build.VERSION_CODES.M)
     private boolean hasPermission(String perm) {
